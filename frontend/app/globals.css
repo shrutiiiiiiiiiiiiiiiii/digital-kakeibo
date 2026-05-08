@@ -1,0 +1,199 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  /* Brand palette tokens (Japanese paper + ink accents) */
+  --sumi: #1a1a1a;
+  --kinari: #f5f0e8;
+  --enji: #b8454d;
+  --ai: #2e4756;
+  --cha: #8b6f47;
+  --washi: #faf7f0;
+
+  /* Semantic tokens */
+  --background: var(--washi);
+  --foreground: var(--sumi);
+  --muted-foreground: rgba(26, 26, 26, 0.58);
+}
+
+html.dark {
+  --background: var(--sumi);
+  --foreground: var(--washi);
+  --muted-foreground: rgba(250, 247, 240, 0.62);
+}
+
+/* Generous Tailwind spacing scale (Phase 2 “breathing room”) */
+@theme inline {
+  /* Colors */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted-foreground: var(--muted-foreground);
+
+  --color-sumi: var(--sumi);
+  --color-kinari: var(--kinari);
+  --color-enji: var(--enji);
+  --color-ai: var(--ai);
+  --color-cha: var(--cha);
+  --color-washi: var(--washi);
+
+  /* Typography */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-shippori-mincho), ui-serif, Georgia, serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, SFMono-Regular, Menlo,
+    monospace;
+
+  /* Radii feel */
+  --radius-xl: 1.25rem;
+  --radius-2xl: 1.75rem;
+  --radius-3xl: 2.25rem;
+
+  /* Larger default spacing primitives */
+  --spacing-1: 0.375rem;
+  --spacing-2: 0.5rem;
+  --spacing-3: 0.75rem;
+  --spacing-4: 1rem;
+  --spacing-5: 1.375rem;
+  --spacing-6: 1.75rem;
+  --spacing-7: 2.125rem;
+  --spacing-8: 2.625rem;
+  --spacing-9: 3.125rem;
+  --spacing-10: 3.75rem;
+  --spacing-11: 4.5rem;
+  --spacing-12: 5.5rem;
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  html.dark {
+    color-scheme: dark;
+  }
+
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    min-height: 100vh;
+    background-image:
+      radial-gradient(circle at 10% 14%, rgba(184, 69, 77, 0.14) 0%, transparent 42%),
+      radial-gradient(circle at 88% 10%, rgba(46, 71, 86, 0.18) 0%, transparent 40%),
+      radial-gradient(circle at 72% 86%, rgba(139, 111, 71, 0.16) 0%, transparent 38%),
+      linear-gradient(180deg, #fcfaf6 0%, var(--background) 100%);
+    background-attachment: fixed;
+    text-rendering: optimizeLegibility;
+  }
+
+  :focus-visible {
+    outline: 2px solid #9f474d;
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer base {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(26, 26, 26, 0.3) transparent;
+  }
+
+  ::selection {
+    background: rgba(184, 69, 77, 0.36);
+    color: var(--sumi);
+  }
+
+  html.dark ::selection {
+    background: rgba(184, 69, 77, 0.4);
+    color: var(--washi);
+  }
+}
+
+@layer components {
+  .kakeibo-shell {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .kakeibo-shell::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image:
+      linear-gradient(to right, rgba(26, 26, 26, 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(26, 26, 26, 0.05) 1px, transparent 1px);
+    background-size: 26px 26px;
+    mask-image: radial-gradient(circle at 50% 20%, black 15%, transparent 85%);
+    opacity: 0.26;
+  }
+
+  .kakeibo-panel {
+    border: 1px solid rgba(26, 26, 26, 0.12);
+    background: linear-gradient(
+      145deg,
+      #fcfaf5,
+      #f8f4ec
+    );
+    box-shadow:
+      0 14px 32px -20px rgba(70, 50, 32, 0.26),
+      inset 0 1px 0 rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(10px);
+  }
+
+  html.dark .kakeibo-panel {
+    background: rgba(26, 26, 26, 0.88);
+    box-shadow:
+      0 18px 38px -24px rgba(0, 0, 0, 0.85),
+      inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  }
+
+  .themed-select {
+    appearance: none;
+    background-image:
+      linear-gradient(45deg, transparent 50%, currentColor 50%),
+      linear-gradient(135deg, currentColor 50%, transparent 50%);
+    background-position:
+      calc(100% - 18px) calc(50% - 3px),
+      calc(100% - 12px) calc(50% - 3px);
+    background-size: 6px 6px, 6px 6px;
+    background-repeat: no-repeat;
+  }
+
+  .themed-select option {
+    background-color: #fffaf4;
+    color: #2b2116;
+  }
+
+  html.dark .themed-select option {
+    background-color: #22262d;
+    color: #f4efe5;
+  }
+}
+
+@keyframes soft-float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+@layer utilities {
+  .animate-soft-float {
+    animation: soft-float 6s ease-in-out infinite;
+  }
+}
