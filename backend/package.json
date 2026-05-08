@@ -4,6 +4,7 @@
   "description": "Digital Kakeibo API server",
   "main": "src/index.js",
   "scripts": {
+    "build": "node -e \"console.log('Backend: no build step required')\"",
     "dev": "nodemon src/index.js",
     "start": "node src/index.js"
   },

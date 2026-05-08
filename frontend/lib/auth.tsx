@@ -104,7 +104,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         token: accessToken,
         body: {
           currency: payload.baseCurrency,
-          baseCurrency: payload.baseCurrency,
           ...payload,
           onboardingCompleted: true,
         },
