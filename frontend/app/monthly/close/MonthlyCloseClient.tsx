@@ -164,28 +164,30 @@ export function MonthlyCloseClient() {
               Handwrite
             </Button>
           </div>
-          {inputMode === "text" ? (
-            <textarea
-              value={answers[step]}
-              onChange={(e) => {
-                const next = [...answers];
-                next[step] = e.target.value;
-                setAnswers(next);
-              }}
-              rows={8}
-              className="w-full rounded-2xl border border-black/15 bg-white/60 px-5 py-4 font-sans text-[15px] leading-8 text-foreground outline-none transition focus:border-enji dark:border-white/10 dark:bg-sumi/30"
-              placeholder={locale === "ja" ? "ここに書いてください…" : "Write your answer…"}
-            />
-          ) : (
-            <HandwritingPad
-              value={handwritingAnswers[step] || ""}
-              onChange={(dataUrl) => {
-                const next = [...handwritingAnswers];
-                next[step] = dataUrl;
-                setHandwritingAnswers(next);
-              }}
-            />
-          )}
+          <div className="mt-2">
+            {inputMode === "text" ? (
+              <textarea
+                value={answers[step]}
+                onChange={(e) => {
+                  const next = [...answers];
+                  next[step] = e.target.value;
+                  setAnswers(next);
+                }}
+                rows={8}
+                className="w-full rounded-2xl border border-black/15 bg-white/60 px-5 py-4 font-sans text-[15px] leading-8 text-foreground outline-none transition focus:border-enji dark:border-white/10 dark:bg-sumi/30"
+                placeholder={locale === "ja" ? "ここに書いてください…" : "Write your answer…"}
+              />
+            ) : (
+              <HandwritingPad
+                value={handwritingAnswers[step] || ""}
+                onChange={(dataUrl) => {
+                  const next = [...handwritingAnswers];
+                  next[step] = dataUrl;
+                  setHandwritingAnswers(next);
+                }}
+              />
+            )}
+          </div>
 
           {isLastQuestion ? (
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">

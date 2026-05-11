@@ -46,6 +46,7 @@ export default function OnboardingPage() {
   const router = useRouter();
   const { user, accessToken, completeOnboarding } = useAuth();
   const { pushToast } = useToast();
+  const [isCompleted, setIsCompleted] = useState(false);
   const [draft, setDraft] = useState<Draft>(() => {
     if (typeof window === "undefined") return INITIAL_DRAFT;
     const saved = window.localStorage.getItem(STORAGE_KEY);
@@ -63,10 +64,10 @@ export default function OnboardingPage() {
   });
 
   useEffect(() => {
-    if (user?.onboardingCompleted) {
+    if (user?.onboardingCompleted && !isCompleted) {
       router.replace("/dashboard");
     }
-  }, [router, user?.onboardingCompleted]);
+  }, [isCompleted, router, user?.onboardingCompleted]);
 
   useEffect(() => {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(draft));
@@ -104,12 +105,41 @@ export default function OnboardingPage() {
     onSuccess: () => {
       window.localStorage.removeItem(STORAGE_KEY);
       pushToast({ tone: "success", message: "Welcome. Your first chapter begins." });
-      router.push("/dashboard");
+      setIsCompleted(true);
     },
   });
 
   const canNextFromSettings = Boolean(draft.baseCurrency.trim());
   const canFinish = !draft.amount || Number(draft.amount) > 0;
+
+  if (isCompleted) {
+    return (
+      <main className="min-h-screen bg-background px-6 py-10 text-foreground">
+        <div className="mx-auto w-full max-w-3xl space-y-8">
+          <div className="flex items-start justify-end">
+            <ThemeToggle />
+          </div>
+          <Card className="space-y-6">
+            <p className="font-sans text-xs font-semibold tracking-[0.28em] uppercase text-muted-foreground">
+              Get started
+            </p>
+            <h1 className="font-display text-4xl tracking-[0.08em]">You are all set</h1>
+            <p className="font-sans text-[15px] leading-8 text-muted-foreground">
+              Your onboarding is complete and your first chapter has been saved.
+            </p>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <Button type="button" onClick={() => router.push("/dashboard")}>
+                Go to dashboard
+              </Button>
+              <Button type="button" onClick={() => router.push("/entries/new")}>
+                Add another entry
+              </Button>
+            </div>
+          </Card>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="min-h-screen bg-background px-6 py-10 text-foreground">
@@ -256,7 +286,7 @@ export default function OnboardingPage() {
             </section>
           ) : null}
 
-          <div className="flex flex-col gap-3 sm:flex-row">
+          <div className="mt-2 flex flex-col gap-3 sm:flex-row">
             {draft.step < 4 ? (
               <Button
                 type="button"
